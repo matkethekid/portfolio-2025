@@ -6,12 +6,14 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Image, { StaticImageData } from "next/image";
 import mateja1 from "../../public/mateja1.webp";
-import foodie from "../../public/foodie.webp";
 import studiozid from "../../public/studiozid2.png";
 import precizna from "../../public/precizna.webp";
 import aistartup from "../../public/aistartup.webp";
 import hikariagency from '../../public/hikariagency.webp';
 import { motion } from "motion/react";
+import { Flame, X } from "lucide-react";
+import Link from "next/link";
+import {Separator} from "@/components/ui/separator";
 
 interface Project {
     id: number;
@@ -19,6 +21,9 @@ interface Project {
     description: string;
     image: StaticImageData;
     techStack: string[];
+    services: string[];
+    url: string;
+    solution: string;
 }
 
 const projects: Project[] = [
@@ -27,42 +32,50 @@ const projects: Project[] = [
         title: "Mateja Stoev portfolio",
         description: "A sleek and immersive portfolio crafted with a dark aesthetic and emerald highlights - designed to spotlight web projects through a minimalist yet impactful visual experience.",
         image: mateja1,
-        techStack: ["Nextjs", "Tailwind", "React"]
+        techStack: ["Nextjs", "Tailwind", "React"],
+        services: ["Frontend Development"],
+        url: "https://matejastoev.dev/",
+        solution: "Implemented a Next.js-powered portfolio with dynamic routing, responsive layouts, optimized media handling, and a refined dark theme crafted to highlight creative work."
     },
     {
         id: 2,
         title: "Studio Zid",
         description: "A clean and functional website built for a painting service studio - developed with Next.js and integrated backend for Google-based login and client reviews, combining simplicity with user-focused utility.",
         image: studiozid,
-        techStack: ["Nextjs", "Tailwind", "React"]
+        techStack: ["Nextjs", "Tailwind", "React"],
+        services: ["Fullstack development", "Google OAuth", "Reviews"],
+        url: "https://studiozid.rs/",
+        solution: "A streamlined digital solution built with Next.js that simplifies service booking for a painting studio. The platform integrates Google-based authentication for effortless client onboarding and a custom review system that builds trust and credibility. The result is a clean, efficient, and user-oriented interface that supports both studio workflow and customer decision-making."
     },
     {
         id: 3,
         title: "Precizna Poljoprivreda",
         description: "A bright and user-friendly platform for precision agriculture - featuring an interactive map, real-time data visualization, and an intuitive admin panel for streamlined land and crop management.",
         image: precizna,
-        techStack: ["React"]
+        techStack: ["React", "Express"],
+        services: ["Fullstack Development", "Admin Panel"],
+        url: "https://preciznapoljoprivreda.rs/",
+        solution: "A complete precision-agriculture solution leveraging React for a fast, responsive interface and Express for secure, scalable data handling. Featuring an interactive map, real-time field insights, and a simple yet powerful admin dashboard, the platform enhances land oversight, crop planning, and operational efficiency."
     },
     {
         id: 4,
-        title: "Foodieland",
-        description: "A fresh and inviting recipe website inspired by a Figma design - built to showcase diverse culinary content through a clean layout, vibrant imagery, and an intuitive browsing experience.",
-        image: foodie,
-        techStack: ["Nextjs", "Tailwind", "React"]
-    },
-    {
-        id: 5,
         title: "AI Startup",
         description: "Great design from uistore.design - fully responsive dark theme with violet highlights.",
         image: aistartup,
-        techStack: ["Nextjs", "Tailwind", "React"]
+        techStack: ["Nextjs", "Tailwind", "React"],
+        services: ["Frontend Development"],
+        url: "https://ai-startup-sigma.vercel.app/",
+        solution: "A Next.js-based UI solution inspired by uistore.design, delivering a modern dark interface with violet accents, responsive layouts, and optimized rendering for a seamless cross-device experience."
     },
     {
-        id: 6,
+        id: 5,
         title: "Hikari Agency",
         description: "Hikari Agency is a modern digital agency specializing in fullstack solutions, combining elegant design with robust, scalable technology. Built with a sleek dark theme, the platform reflects Hikari’s core values: precision, innovation, and aesthetic excellence.",
         image: hikariagency,
-        techStack: ["Nextjs", "Tailwind", "React"]
+        techStack: ["Nextjs", "Tailwind", "React", "NestJS"],
+        services: ["Fullstack Development"],
+        url: "https://hikariagency.org/",
+        solution: "A fullstack solution built with a Next.js frontend and NestJS backend to provide Hikari Agency with a modern, scalable platform. The system combines a sleek dark theme with intuitive navigation, enabling seamless content management, precise project presentation, and an elegant user experience that reflects the agency’s core values of innovation and precision."
     }
 ];
 
@@ -95,25 +108,40 @@ const ProjectsPage = () => {
         <Navbar isSidebarOpen={isSidebarOpen}/>
       </div>
         <div className={isProjectOpen ? 'bg-black w-full h-full fixed inset-0 opacity-[0.8] z-40' : 'hidden'}></div>
-        <div className={isProjectOpen ? 'fixed inset-0 flex items-center justify-center z-50' : 'hidden'} onClick={closeProject}>
-            <div className="w-full max-w-5xl h-[80%] flex flex-col-reverse lg:flex-row items-center justify-center rounded-lg">
-                <div className="rounded-l-[10px] w-full h-full relative p-1">
-                    <Image src={currentProject.image} alt={'image'} className="w-full h-full object-cover flex z-1 rounded-[10px]"/>
+        <div className={isProjectOpen ? 'fixed inset-0 flex h-screen items-center justify-center z-50' : 'hidden'} onClick={closeProject}>
+            <div className="w-[90%] lg:max-w-5xl h-full flex flex-col-reverse lg:flex-row items-center justify-center rounded-lg overflow-auto pt-5 pb-5">
+                <div className="rounded-l-[10px] w-full h-full relative p-1 hidden lg:block">
+                    {
+                        currentProject.image && (
+                            <Image src={currentProject.image} alt={'image'} className="w-full h-full object-cover flex z-1 rounded-[10px]"/>
+                        )
+                    }
                     <div className={'bg-linear-to-r from-black/1 via-black/50 to-black w-[40%] h-full opacity-[0.8] z-20 top-0 right-0 absolute'}></div>
                 </div>
-                <div className="bg-[#06070a] rounded-[10px] opacity-[1] rounded-r-[10px] w-full h-full flex flex-col gap-10 pt-7 pb-7 pl-7 pr-7">
+                <div className="bg-[#06070a] rounded-[10px] overflow-auto opacity-[1] rounded-r-[10px] relative w-full h-full flex flex-col gap-10 p-7">
+                    <button onClick={closeProject} className="absolute right-5 top-3 cursor-pointer"><X /></button>
                     <h1 className="text-4xl font-bold">{currentProject.title}</h1>
-                    <div className="w-[90%] h-[2px] mx-auto bg-linear-to-r from-black via-emerald-950 to-black"></div>
+                    <Separator/>
                     <p className="text-slate-300 text-md">{currentProject.description}</p>
-                    <div className="flex flex-col w-full">
+                    <div className="flex flex-col w-full gap-3">
                         <h2 className="text-emerald-600">SERVICES</h2>
                         <div className="flex flex-wrap gap-5">
-                            <p>aaaaa</p>
-                            <p>asdasdasdasd</p>
-                            <p>asdasdasdasdasd</p>
-                            <p>asddddasdasdasdada</p>
+                            {
+                                currentProject?.services?.map((service: any, index: number) => (
+                                    <p key={index} className="pt-1 pb-1 pl-4 pr-4 bg-emerald-500/10 rounded-full text-sm">{service}</p>
+                                ))
+                            }
                         </div>
                     </div>
+                    <div className="w-[100%] rounded-[10px] p-3 bg-emerald-950/30 border-1 border-emerald-700 flex flex-col gap-3">
+                        <h3 className="text-slate-300 flex text-md gap-1"><span><Flame className="size-5"/></span> Solution</h3>
+                        <p className="text-sm">{currentProject?.solution}</p>
+                    </div>
+                    {
+                        currentProject.url && (
+                            <Link href={currentProject?.url} className="w-[100%] p-5 bg-linear-to-b from-emerald-600 via-emerald-700 to-emerald-800 cursor-pointer rounded-[10px] text-center">Visit website</Link>
+                        )
+                    }
                 </div>
             </div>
         </div>

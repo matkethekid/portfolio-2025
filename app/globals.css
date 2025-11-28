@@ -6,6 +6,24 @@
   --foreground: #fff;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f0f0f;
+    border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #064e3b;
+    border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #059669;
+}
+
 html, body {
   height: 100%;
   margin: 0;
